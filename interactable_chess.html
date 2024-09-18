@@ -1,0 +1,45 @@
+<!--
+
+Purpose: Create an interactable chess website
+
+Owen Colley
+9/16/24
+
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Owen's Chessboard and Engine!</title>
+    <link rel="shortcut icon" href="https://img.icons8.com/?size=512&id=5l29cBQpcOxR&format=png">
+    <style>
+        .chessboard {
+            width: 800px;
+            height: 800px;
+            display: grid;
+            grid-template-columns: repeat(8, 100px);
+            grid-template-rows: repeat(8, 100px);
+        }
+
+        .square {
+            width: 100px;
+            height: 100px;
+            text-align: center;   
+
+        }
+
+        .black_square {
+            background-color: tan;
+        }
+
+        .white_square {
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color: black;">
+    <div class="chessboard">
+        </div>
+    <script src="script.js"></script>
+</body>
+</html>
