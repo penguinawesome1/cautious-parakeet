@@ -17,7 +17,8 @@
 <body>
   <video id="webCam" autoplay playsinlne width="800" height="600"></video>
   <canvas id="canvas"></canvas>
-  <a download onClick="takeAPicture()>SNAP</a>
+  <a download onClick="takeAPicture()">SNAP</a>
+  
   <script>
     const webCamElement = document.getElementById("webCam");
     const canvasElement = document.getElementById("canvas");
@@ -25,7 +26,7 @@
     webcam.start();
 
     funcion takeAPicture() {
-      let picture = webcam.snap();
+      let picture = webCam.snap();
       document.querySelector("a").href = picture;
     }
   </script>
