@@ -56,31 +56,8 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
-
-    function randomize(arr) {
-      let data = [...arr];
-      let chosenItems = [];
-      
-      function getRandomValue() {
-        if (data.length === 0) {
-          data = chosenItems;
-          chosenItems = [];
-        }
-        const index = Math.floor(Math.random() * data.length);
-        const choice = data.splice(index, 1)[0];
-        chosenItems.push(choice);
-        return choice;
-      }
-      return {
-        randomItem: getRandomValue
-      }
-    }
     
-    const dummyData = [ 1,2,3,4,5 ];
-    const randomizeData = randomize(dummyData);
-    for (let i = 0; i< 10; i++) {
-      console.log(randomizeData.randomItem())
-    }
+    document.write(const randomElement = array[Math.floor(Math.random() * array.length)];);
   </script>
   <p>
     <br>
