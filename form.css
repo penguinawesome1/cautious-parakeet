@@ -1,10 +1,14 @@
-.body {
-    height: 100%;
-    display: grid;
-    place-content: center;
+.btn_row {
+    background-color: black;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    cursor: pointer;
+    float: left;
+    width: 100%;
 }
 
-.btn {
+.btn1 {
     display: inline-block;
     outline: 0;
     border: 0;
@@ -16,5 +20,29 @@
     border-bottom: 4px solid #2b6cb0;
     font-weight: 700;
     color: white;
+    line-height: 26px;
+}
+
+.btn1:hover{
+    background-color: red;
+    border-bottom: 4px solid darkred;
+    color: #fff;
+    transform: translateY(-4px);
+}
+
+.btn1:active {     
+    transform: translateY(4px);
+}
+
+.btn1_off {
+    display: inline-block;
+    outline: 0;
+    border: 0;
+    cursor: default;
+    background-color: gray;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 16px;
+    color: black;
     line-height: 26px;
 }
