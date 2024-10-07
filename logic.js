@@ -11,6 +11,7 @@ const btnGameMode = document.getElementById("game_mode"),
     btnReset = document.getElementById("reset"),
     fills = ['#FFD700', '#259625'],
     colors = ['4px solid #DAA520', '4px solid darkgreen'],
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
     historyContainer = document.querySelector('.history'),
     chessboard = document.querySelector('.chessboard'),
     defaultChessboard = [
@@ -32,7 +33,8 @@ function createSquares() {
         for (let col = 0; col < 8; col++) {
             const square = document.createElement('div');
             square.classList.add('square');
-            square.classList.add(row % 2 === col % 2 ? 'white_square' : 'black_square');            
+            square.classList.add(row % 2 === col % 2 ? 'white_square' : 'black_square');
+            square.id = `${letters[col]}${row}`;
             chessboard.appendChild(square);
             rowArr.push(square);
         }
@@ -45,7 +47,8 @@ function setBoard() {
     for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {
             const image = document.createElement('img');
-            switch (defaultChessboard[row][col]) {
+            image.id = defaultChessboard[row][col];
+            switch (image.id) {
                 case 'P': image.src = `https://www.symbols.com/images/symbol/3409_white-pawn.png`; break;
                 case 'N': image.src = `https://www.symbols.com/images/symbol/3408_white-knight.png`; break;
                 case 'B': image.src = `https://www.symbols.com/images/symbol/3407_white-bishop.png`; break;
@@ -63,16 +66,17 @@ function setBoard() {
             image.classList.add('piece');        
             image.style.width = '100%';
             image.style.height = '100%';
-            // squares[row][col].childNodes[0] = image;
             squares[row][col].appendChild(image);
         }
     }
 }
 
-function updateHistory(move, halfTurns) {
+function updateHistory(pieceType, move, halfTurns) {
     if (halfTurns % 2 === 1) {
+        pieceType = pieceType.toUpperCase();
+        if (pieceType === 'P') pieceType = '';
         const lastBox = historyContainer.children[historyContainer.children.length - 1];
-        lastBox.textContent += ` ${move}`;
+        lastBox.textContent += ` ${pieceType}${move}`;
         return;
     }
 
@@ -133,11 +137,11 @@ chessboard.addEventListener('drop', (event) => {
     const droppedPiece = event.dataTransfer.getData('text/plain'); // Get dragged piece ID
 
     if (selectedPiece && droppedSquare !== selectedSquare && isValidMove(selectedPiece, selectedSquare, droppedSquare)) {
+        updateHistory(image.id, droppedSquare.id, ++halfTurns);
         selectedSquare.removeChild(selectedPiece);
         droppedSquare.appendChild(selectedPiece);
         selectedPiece = null;
         selectedSquare = null;
-        updateHistory('e2', ++halfTurns);
     }
 });
 
@@ -154,11 +158,11 @@ chessboard.addEventListener('click', (event) => {
     const clickedPiece = clickedSquare.querySelector('.piece');
 
     if (selectedPiece && clickedSquare !== selectedSquare && isValidMove(selectedPiece, selectedSquare, clickedSquare)) {
+        updateHistory(image.id document.querySelectorAll('#container img');, clickedSquare.id, ++halfTurns);
         selectedSquare.removeChild(selectedPiece);
         clickedSquare.appendChild(selectedPiece);
         selectedPiece = null;
         selectedSquare = null;
-        updateHistory('e2', ++halfTurns);
     } else if (clickedPiece) {
         selectedPiece = clickedPiece;
         selectedSquare = clickedSquare;
