@@ -34,7 +34,7 @@ function createSquares() {
             const square = document.createElement('div');
             square.classList.add('square');
             square.classList.add(row % 2 === col % 2 ? 'white_square' : 'black_square');
-            square.id = `${letters[col]}${row}`;
+            square.id = `${letters[col]}${8-row}`;
             chessboard.appendChild(square);
             rowArr.push(square);
         }
@@ -42,6 +42,12 @@ function createSquares() {
 }
 
 function setBoard() {
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            squares[row][col].image = null;
+            chessboard.childNodes[row * 8 + col].innerHTML = null;
+        }
+    }
     halfTurns = 1;
     historyContainer.innerHTML = "";
     for (let row = 0; row < 8; row++) {
@@ -69,9 +75,54 @@ function setBoard() {
             squares[row][col].appendChild(image);
         }
     }
+
+    chessboard.addEventListener('dragover', (event) => {
+        event.preventDefault(); // Allow dropping within the chessboard
+    });
+    
+    chessboard.addEventListener('drop', (event) => {
+        event.preventDefault();
+    
+        const droppedSquare = event.target.closest('.square');
+        const droppedPiece = event.dataTransfer.getData('text/plain'); // Get dragged piece ID
+    
+        if (selectedPiece && droppedSquare !== selectedSquare && isValidMove(selectedPiece, selectedSquare, droppedSquare)) {
+            updateHistory(selectedSquare.firstChild.id, droppedSquare.id, ++halfTurns);
+            selectedSquare.removeChild(selectedPiece);
+            droppedSquare.appendChild(selectedPiece);
+            selectedPiece = null;
+            selectedSquare = null;
+        }
+    });
+    
+    chessboard.querySelectorAll('.piece').forEach((piece) => {
+        piece.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text/plain', piece.id); // Set dragged piece ID
+            selectedPiece = piece;
+            selectedSquare = piece.parentNode;
+        });
+    });
+    
+    chessboard.addEventListener('click', (event) => {
+        const clickedSquare = event.target.closest('.square');
+        const clickedPiece = clickedSquare.querySelector('.piece');
+    
+        if (selectedPiece && clickedSquare !== selectedSquare && isValidMove(selectedPiece, selectedSquare, clickedSquare)) {
+            updateHistory(selectedSquare.firstChild.id, clickedSquare.id, ++halfTurns);
+            selectedSquare.removeChild(selectedPiece);
+            clickedSquare.appendChild(selectedPiece);
+            selectedPiece = null;
+            selectedSquare = null;
+        } else if (clickedPiece) {
+            selectedPiece = clickedPiece;
+            selectedSquare = clickedSquare;
+        }
+    });
 }
 
 function updateHistory(pieceType, move, halfTurns) {
+    console.log(pieceType);
+
     if (halfTurns % 2 === 1) {
         pieceType = pieceType.toUpperCase();
         if (pieceType === 'P') pieceType = '';
@@ -84,7 +135,9 @@ function updateHistory(pieceType, move, halfTurns) {
     box.classList.add('container3');
     box.style.backgroundColor = fills[(halfTurns / 2) % colors.length];
     box.style.borderBottom = colors[(halfTurns / 2) % colors.length];
-    box.textContent = `${halfTurns/2}. ${move}`;
+    pieceType = pieceType.toUpperCase();
+    if (pieceType === 'P') pieceType = '';
+    box.textContent = `${halfTurns/2}. ${pieceType}${move}`;
     historyContainer.appendChild(box);
     historyContainer.scrollTop = historyContainer.scrollHeight;
 }
@@ -125,46 +178,3 @@ btnDepth.onclick = () => {
 };
 
 btnReset.addEventListener('click', setBoard);
-
-chessboard.addEventListener('dragover', (event) => {
-    event.preventDefault(); // Allow dropping within the chessboard
-});
-
-chessboard.addEventListener('drop', (event) => {
-    event.preventDefault();
-
-    const droppedSquare = event.target.closest('.square');
-    const droppedPiece = event.dataTransfer.getData('text/plain'); // Get dragged piece ID
-
-    if (selectedPiece && droppedSquare !== selectedSquare && isValidMove(selectedPiece, selectedSquare, droppedSquare)) {
-        updateHistory(image.id, droppedSquare.id, ++halfTurns);
-        selectedSquare.removeChild(selectedPiece);
-        droppedSquare.appendChild(selectedPiece);
-        selectedPiece = null;
-        selectedSquare = null;
-    }
-});
-
-chessboard.querySelectorAll('.piece').forEach((piece) => {
-    piece.addEventListener('dragstart', (event) => {
-        event.dataTransfer.setData('text/plain', piece.id); // Set dragged piece ID
-        selectedPiece = piece;
-        selectedSquare = piece.parentNode;
-    });
-});
-
-chessboard.addEventListener('click', (event) => {
-    const clickedSquare = event.target.closest('.square');
-    const clickedPiece = clickedSquare.querySelector('.piece');
-
-    if (selectedPiece && clickedSquare !== selectedSquare && isValidMove(selectedPiece, selectedSquare, clickedSquare)) {
-        updateHistory(image.id document.querySelectorAll('#container img');, clickedSquare.id, ++halfTurns);
-        selectedSquare.removeChild(selectedPiece);
-        clickedSquare.appendChild(selectedPiece);
-        selectedPiece = null;
-        selectedSquare = null;
-    } else if (clickedPiece) {
-        selectedPiece = clickedPiece;
-        selectedSquare = clickedSquare;
-    }
-});
